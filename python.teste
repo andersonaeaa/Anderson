@@ -1,0 +1,27 @@
+import os
+import hashlib
+
+def calculate_hash(file):
+    with open(file, 'rb') as f:
+        contents = f.read()
+        return hashlib.md5(contents).hexdigest()
+
+folder_path = '/content/sample_data1'
+file_hashes = {}
+duplicate_files = []
+
+for file_name in os.listdir(folder_path):
+    file_path = os.path.join(folder_path, file_name)
+    if os.path.isfile(file_path):
+        file_hash = calculate_hash(file_path)
+        if file_hash in file_hashes:
+            duplicate_files.append((file_name, file_hashes[file_hash]))
+        else:
+            file_hashes[file_hash] = file_name
+
+if duplicate_files:
+    print("Arquivos idênticos encontrados:")
+    for file_1, file_2 in duplicate_files:
+        print(f"{file_1} e {file_2} são idênticos.")
+else:
+    print("Não foram encontrados arquivos idênticos.")
